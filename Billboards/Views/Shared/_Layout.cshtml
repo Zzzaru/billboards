@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title - Рекламные конструкции</title>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/bootstrap")
+    @Styles.Render("~/Content/kendo")
+    @RenderSection("css", false)
+</head>
+    <body>
+        <div class="container-fluid">
+            @RenderBody()
+        </div>
+        <script src="http://api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/ymapfunc")
+        @RenderSection("scripts", false)
+    </body>
+</html>
