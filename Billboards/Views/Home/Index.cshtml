@@ -1,0 +1,91 @@
+﻿@model IEnumerable<Billboards.Models.EF.BillboardE>
+
+@{
+    ViewBag.Title = "Список";
+}
+
+<h2>Список рекламных конструкций</h2>
+
+<p>
+    @Html.ActionLink("Добавить", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MaintenanceTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Location)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Type)
+        </th>
+
+        <th>размеры конструкции (см.)</th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.MonthlyCost)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaintenanceTime)
+            </td>
+            <td class="@(item.Location != null ? "coord" : "")">
+                @if (item.Location != null)
+                {
+                    <input type="hidden" value="@item.Location.Longitude" />
+                    <input type="hidden" value="@item.Location.Latitude" />
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+
+            <td>@item.Width * @item.Heigh</td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.MonthlyCost)
+            </td>
+            <td>
+                @Html.ActionLink("редактировать", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("просмотр", "Details", new { id = item.Id }) |
+                @Html.ActionLink("удалить", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+</table>
+
+@section scripts{
+<script>
+    $(function () {
+        ymaps.ready(init);
+    });
+
+    function init() {
+        $('.coord').each(function (i, v) {
+            var longitude = $('input:first', v).val().replace(",", "."),
+                latitude = $('input:last', v).val().replace(",", ".");
+
+            if (longitude && latitude) {
+                var myGeocoder = ymaps.geocode([parseFloat(latitude), parseFloat(longitude)]);
+                myGeocoder.then(function (res) {
+                    var streetName = res.geoObjects.get(0).properties.get('name');;
+                    $(v).append($('<span>').html(streetName));
+                });
+            }
+        });
+    }
+</script>
+
+}
